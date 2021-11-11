@@ -40,4 +40,16 @@ describe("Sauna API Server", () => {
       JSON.parse(res2.text)[2].report.should.equal("テストサウナ");
     });
   });
+
+  describe("PATCH /api/activity/:id", () => {
+    it("should modify activity", async () => {
+      const res = await request
+        .patch("/api/activity/9")
+        .send({ report: "レポートを修正します", relax_level: 2 });
+      res.should.be.json;
+      JSON.parse(res.text)[0].report.should.to.deep.equal(
+        "レポートを修正します"
+      );
+    });
+  });
 });
