@@ -2,14 +2,29 @@
 const config = require("../config");
 
 module.exports = {
-  client: "pg",
-  connection: config.db.connection,
-  pool: {
-    min: 2,
-    max: 10,
+  devlopment: {
+    client: "pg",
+    connection: config.db.connection,
+    pool: {
+      min: 2,
+      max: 10,
+    },
+    migrations: {
+      tableName: "knex_migrations",
+      directory: "./migrations",
+    },
   },
-  migrations: {
-    tableName: "knex_migrations",
-    directory: "./migrations",
+  production: {
+    client: "pg",
+    connection: {
+      connectionString: process.env.DATABASE_URL,
+      ssl: { rejectUnauthorized: false },
+    },
+    migrations: {
+      directory: __dirname + "/models/migrations",
+    },
+    seeds: {
+      directory: __dirname + "/models/seeds",
+    },
   },
 };
