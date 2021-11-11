@@ -38,6 +38,11 @@ const setupServer = () => {
     models.delete({ id: req.params.id });
     res.status(200).end();
   });
+
+  app.get("/api/sauna", (req, res) => {
+    models.getSauna.then((saunas) => res.status(200).json(saunas));
+  });
+
   return app;
 };
 

@@ -25,6 +25,15 @@ Activity.prototype.serialize = function() {
   };
 };
 
+// sauna
+const Sauna = function(dbsauna) {
+  this.id = dbsauna.id;
+  this.sauna_name = dbsauna.sauna_name;
+  this.sauna_temp = dbsauna.sauna_temp;
+  this.water_temp = dbsauna.water_temp;
+  this.presence_loyly = dbsauna.presence_loyly;
+};
+
 module.exports = function(knex) {
   const getActivities = knex("activities")
     .innerJoin("saunas", "saunas.id", "activities.sauna_id")
@@ -106,11 +115,14 @@ module.exports = function(knex) {
       });
   };
 
+  const getSaunas = knex("saunas").select();
+
   return {
     list: getActivities.map((activity) => new Activity(activity)),
     selectSingle: getActivity,
     create: createActivities,
     update: updateActivities,
     delete: deleteActivities,
+    getSauna: getSaunas.map((sauna) => new Sauna(sauna)),
   };
 };

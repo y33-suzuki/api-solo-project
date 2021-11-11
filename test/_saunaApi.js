@@ -22,6 +22,11 @@ describe("Sauna API Server", () => {
     request = chai.request(server).keepOpen();
   });
 
+  after(async function() {
+    await knex.raw("SELECT SETVAL ('activities_id_seq', 1, false)");
+    await knex.seed.run({ directory: "./models/seeds" });
+  });
+
   describe("GET /api/activity", () => {
     it("should return status 200 and all activities", async () => {
       const res = await request.get("/api/activity");
@@ -72,6 +77,14 @@ describe("Sauna API Server", () => {
       res.should.have.status(200);
       const res2 = await request.get("/api/activity/2");
       res2.should.have.status(404);
+    });
+  });
+
+  describe("GET /api/sauna", () => {
+    it("should return status 200 and all saunas", async () => {
+      const res = await request.get("/api/sauna");
+      res.should.have.status(200);
+      res.should.be.json;
     });
   });
 });
