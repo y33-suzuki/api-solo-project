@@ -10,10 +10,9 @@ const models = require("../models")(knex);
 
 const setupServer = () => {
   app.get("/api/activity", (req, res) => {
-    res.status(200).send("Hello");
-    // models.list
-    //   .then((activities) => activities.map((activity) => activity.serialize()))
-    //   .then((activities) => res.status(200).json(activities));
+    models.list
+      .then((activities) => activities.map((activity) => activity.serialize()))
+      .then((activities) => res.status(200).json(activities));
   });
 
   return app;

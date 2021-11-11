@@ -20,7 +20,7 @@ Activity.prototype.serialize = function() {
 };
 
 module.exports = function(knex) {
-  const activitys = knex("activitys").select();
+  const activitys = knex("activities").select();
   return {
     list: activitys.map((activity) => new Activity(activity)),
   };

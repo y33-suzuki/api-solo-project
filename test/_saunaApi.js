@@ -20,6 +20,9 @@ describe("Sauna API Server", () => {
     it("should return status 200", async () => {
       const res = await request.get("/api/activity");
       res.should.have.status(200);
+      res.should.be.json;
+      JSON.parse(res.text)[0].sauna_id.should.equal(1);
+      JSON.parse(res.text)[0].sauna_name.should.equal("スカイスパYOKOHAMA");
     });
   });
 });
