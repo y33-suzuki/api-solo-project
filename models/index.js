@@ -2,6 +2,7 @@
 const Activity = function(dbactivity) {
   this.id = dbactivity.id;
   this.sauna_id = dbactivity.sauna_id;
+  this.sauna_name = dbactivity.sauna_name;
   this.report = dbactivity.report;
   this.relax_level = dbactivity.relax_level;
   this.created_at = dbactivity.created_at;
@@ -13,6 +14,7 @@ Activity.prototype.serialize = function() {
   return {
     id: this.id,
     sauna_id: this.sauna_id,
+    sauna_name: this.sauna_name,
     report: this.report,
     relax_level: this.relax_level,
     created_at: this.created_at,
@@ -20,7 +22,9 @@ Activity.prototype.serialize = function() {
 };
 
 module.exports = function(knex) {
-  const activitys = knex("activities").select();
+  const activitys = knex("activities")
+    .innerJoin("saunas", "saunas.id", "activities.sauna_id")
+    .select();
   return {
     list: activitys.map((activity) => new Activity(activity)),
   };
