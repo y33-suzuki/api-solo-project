@@ -14,7 +14,7 @@ exports.up = async (knex) => {
 
     t.varchar("report", 100).notNullable();
 
-    t.integer("relax_level").notNullable();
+    t.integer("relax").notNullable();
 
     t.timestamp("created_at")
       .notNullable()

@@ -41,7 +41,7 @@ describe("Sauna API Server", () => {
         user_id: 1,
         sauna_id: 3,
         report: "テストサウナ",
-        relax_level: 3,
+        relax: 3,
       });
       res.should.have.status(201);
       const res2 = await request.get("/api/activity/3");
@@ -63,7 +63,7 @@ describe("Sauna API Server", () => {
     it("should modify activity", async () => {
       const res = await request
         .patch("/api/activity/2")
-        .send({ report: "レポートを修正します", relax_level: 2 });
+        .send({ report: "レポートを修正します", relax: 2 });
       res.should.have.status(200);
       const res2 = await request.get("/api/activity/2");
       res2.should.be.json;

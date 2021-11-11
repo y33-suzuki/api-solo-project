@@ -43,13 +43,13 @@ exports.seed = async (knex) => {
       user_id: 1,
       sauna_id: 1,
       report: "10分×3",
-      relax_level: 5,
+      relax: 5,
     },
     {
       user_id: 1,
       sauna_id: 2,
       report: "8分×4",
-      relax_level: 1,
+      relax: 1,
     },
   ]);
 };
