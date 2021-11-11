@@ -20,6 +20,17 @@ const setupServer = () => {
     res.status(201).end();
   });
 
+  app.get("/api/activity/:id", (req, res) => {
+    models
+      .selectSingle({ id: req.params.id })
+      .then((activities) => res.status(200).json(activities));
+  });
+
+  app.patch("/api/activity/:id", (req, res) => {
+    models.update({ id: req.params.id, ...req.body });
+    res.status(200).end();
+  });
+
   return app;
 };
 

@@ -39,22 +39,60 @@ module.exports = function(knex) {
       "relax_level as relax_level",
       "created_at as created_at"
     );
+
+  const getActivity = (params) => {
+    const { id } = params;
+    return knex("activities")
+      .innerJoin("saunas", "saunas.id", "activities.sauna_id")
+      .innerJoin("users", "users.id", "activities.user_id")
+      .select(
+        "activities.id as id",
+        "activities.user_id as user_id",
+        "users.user_name as user_name",
+        "activities.sauna_id as sauna_id",
+        "saunas.sauna_name as sauna_name",
+        "report as report",
+        "relax_level as relax_level",
+        "created_at as created_at"
+      )
+      .where({ "activities.id": id })
+      .then((activities) => {
+        return new Activity(activities.pop());
+      });
+  };
   const createActivities = (params) => {
-    console.log(params);
     const { user_id, sauna_id, report, relax_level } = params;
 
-    knex("activities")
+    return knex("activities")
       .insert({
-        user_id: user_id,
-        sauna_id: sauna_id,
-        report: report,
-        relax_level: relax_level,
+        user_id,
+        sauna_id,
+        report,
+        relax_level,
       })
-      .then((result) => {});
+      .then((result) => {
+        return result;
+      });
+  };
+
+  const updateActivities = (params) => {
+    const { id, report, relax_level } = params;
+
+    return knex("activities")
+      .update({
+        report,
+        relax_level,
+      })
+      .where({ id })
+      .then((result) => {
+        return result;
+      });
   };
 
   return {
     list: getActivities.map((activity) => new Activity(activity)),
+    selectSingle: getActivity,
     create: createActivities,
+    update: updateActivities,
   };
 };
