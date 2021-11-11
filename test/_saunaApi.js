@@ -17,12 +17,26 @@ describe("Sauna API Server", () => {
   });
 
   describe("GET /api/activity", () => {
-    it("should return status 200", async () => {
+    it("should return status 200 and all activities", async () => {
       const res = await request.get("/api/activity");
       res.should.have.status(200);
       res.should.be.json;
       JSON.parse(res.text)[0].sauna_id.should.equal(1);
       JSON.parse(res.text)[0].sauna_name.should.equal("スカイスパYOKOHAMA");
+    });
+  });
+
+  describe("POST /api/activity", () => {
+    it("should return status 201 when posting activity", async () => {
+      const res = await request.post("/api/activity").send({
+        sauna_id: 3,
+        report: "テストサウナ",
+        relax_level: 3,
+      });
+      res.should.have.status(201);
+      const res2 = await request.get("/api/activity");
+      res2.should.be.json;
+      JSON.parse(res2.text)[2].report.should.equal("テストサウナ");
     });
   });
 });
