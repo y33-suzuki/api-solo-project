@@ -57,7 +57,13 @@ module.exports = function(knex) {
       )
       .where({ "activities.id": id })
       .then((activities) => {
-        return new Activity(activities.pop());
+        if (activities.length > 0) {
+          return new Activity(activities.pop());
+        }
+        return Promise.reject("Error");
+      })
+      .catch((err) => {
+        return Promise.reject(err);
       });
   };
   const createActivities = (params) => {
@@ -89,10 +95,22 @@ module.exports = function(knex) {
       });
   };
 
+  const deleteActivities = (params) => {
+    const { id } = params;
+
+    return knex("activities")
+      .delete()
+      .where({ id })
+      .then((result) => {
+        return result;
+      });
+  };
+
   return {
     list: getActivities.map((activity) => new Activity(activity)),
     selectSingle: getActivity,
     create: createActivities,
     update: updateActivities,
+    delete: deleteActivities,
   };
 };

@@ -65,4 +65,13 @@ describe("Sauna API Server", () => {
       JSON.parse(res2.text).report.should.equal("レポートを修正します");
     });
   });
+
+  describe("DELETE /api/activity/:id", () => {
+    it("should delete activity", async () => {
+      const res = await request.delete("/api/activity/2");
+      res.should.have.status(200);
+      const res2 = await request.get("/api/activity/2");
+      res2.should.have.status(404);
+    });
+  });
 });

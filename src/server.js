@@ -23,7 +23,10 @@ const setupServer = () => {
   app.get("/api/activity/:id", (req, res) => {
     models
       .selectSingle({ id: req.params.id })
-      .then((activities) => res.status(200).json(activities));
+      .then((activities) => {
+        res.status(200).json(activities);
+      })
+      .catch(() => res.status(404).end());
   });
 
   app.patch("/api/activity/:id", (req, res) => {
@@ -31,6 +34,10 @@ const setupServer = () => {
     res.status(200).end();
   });
 
+  app.delete("/api/activity/:id", (req, res) => {
+    models.delete({ id: req.params.id });
+    res.status(200).end();
+  });
   return app;
 };
 
