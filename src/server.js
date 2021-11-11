@@ -15,6 +15,11 @@ const setupServer = () => {
       .then((activities) => res.status(200).json(activities));
   });
 
+  app.post("/api/activity", (req, res) => {
+    models.create(req.body);
+    res.status(201).end();
+  });
+
   return app;
 };
 

@@ -2,9 +2,13 @@ exports.up = async (knex) => {
   await knex.schema.createTable("activities", (t) => {
     t.increments().index();
 
+    t.integer("user_id")
+      .references("users.id")
+      .notNullable()
+      .index();
+
     t.integer("sauna_id")
       .references("saunas.id")
-      .unique()
       .notNullable()
       .index();
 

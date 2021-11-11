@@ -2,6 +2,8 @@ exports.seed = async (knex) => {
   // Deletes ALL existing entries
   await knex("activities").del();
   await knex("saunas").del();
+  await knex("users").del();
+
   await knex("saunas").insert([
     // Inserts seed entries
     {
@@ -27,16 +29,24 @@ exports.seed = async (knex) => {
     },
   ]);
 
-  await knex("activities").insert([
+  await knex("users").insert([
     // Inserts seed entries
     {
       id: 1,
+      user_name: "Yoshiaki Suzuki",
+    },
+  ]);
+
+  await knex("activities").insert([
+    // Inserts seed entries
+    {
+      user_id: 1,
       sauna_id: 1,
       report: "10分×3",
       relax_level: 5,
     },
     {
-      id: 2,
+      user_id: 1,
       sauna_id: 2,
       report: "8分×4",
       relax_level: 1,

@@ -29,6 +29,7 @@ describe("Sauna API Server", () => {
   describe("POST /api/activity", () => {
     it("should return status 201 when posting activity", async () => {
       const res = await request.post("/api/activity").send({
+        user_id: 1,
         sauna_id: 3,
         report: "テストサウナ",
         relax_level: 3,
