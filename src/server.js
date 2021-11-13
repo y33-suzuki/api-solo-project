@@ -57,6 +57,25 @@ const setupServer = () => {
 
   /**
    * @swagger
+   * /api/activity_async:
+   *   get:
+   *     tags:
+   *       - "activity"
+   *     summary: サ活DBに登録されている全サ活を返却します（async/awaitで実装）。
+   *     description: サ活DBに登録されている全サ活を返却します。
+   *     produces:
+   *       - application/json
+   *     responses:
+   *       200:
+   *         description: サ活DBに登録されている全サ活を返却する
+   */
+  app.get("/api/activity_async", async (req, res) => {
+    const result = await models.list_async();
+    res.status(200).send(result);
+  });
+
+  /**
+   * @swagger
    * /api/activity:
    *   post:
    *     tags:
@@ -121,6 +140,31 @@ const setupServer = () => {
         res.status(200).json(activities);
       })
       .catch(() => res.status(404).end());
+  });
+
+  /**
+   * @swagger
+   * /api/activity_async/{id}:
+   *   get:
+   *     tags:
+   *       - "activity"
+   *     summary: 指定のIDのサ活を返却します。（async/await）
+   *     description: 指定のIDのサ活を返却します。
+   *     produces:
+   *       - application/json
+   *     parameters:
+   *       - name: "id"
+   *         in: "path"
+   *         description: "指定のIDのサ活を返却します。"
+   *         required: true
+   *         type: "integer"
+   *     responses:
+   *       200:
+   *         description: 指定のIDのサ活を返却します。
+   */
+  app.get("/api/activity_async/:id", async (req, res) => {
+    const result = await models.selectSingle_async({ id: req.params.id });
+    res.send(result);
   });
 
   /**

@@ -10,21 +10,6 @@ const Activity = function(dbactivity) {
   this.created_at = dbactivity.created_at;
 };
 
-Activity.prototype.serialize = function() {
-  // serialize を使用してオブジェクトをフォーマットし、
-  // パスワードなどクライアントに送信すべきでない情報（パスワードなど）を削除します。
-  return {
-    id: this.id,
-    user_id: this.user_id,
-    user_name: this.user_name,
-    sauna_id: this.sauna_id,
-    sauna_name: this.sauna_name,
-    report: this.report,
-    relax: this.relax,
-    created_at: this.created_at,
-  };
-};
-
 // sauna
 const Sauna = function(dbsauna) {
   this.id = dbsauna.id;
@@ -60,6 +45,22 @@ module.exports = function(knex) {
       });
   };
 
+  const getActivities_async = () => {
+    return knex("activities")
+      .innerJoin("saunas", "saunas.id", "activities.sauna_id")
+      .innerJoin("users", "users.id", "activities.user_id")
+      .select(
+        "activities.id as id",
+        "activities.user_id as user_id",
+        "users.user_name as user_name",
+        "activities.sauna_id as sauna_id",
+        "saunas.sauna_name as sauna_name",
+        "report as report",
+        "relax as relax",
+        "created_at as created_at"
+      );
+  };
+
   const getActivity = (params) => {
     const { id } = params;
     return knex("activities")
@@ -86,6 +87,29 @@ module.exports = function(knex) {
         return Promise.reject(err);
       });
   };
+
+  const getActivity_async = async (params) => {
+    const { id } = params;
+    const result = await knex("activities")
+      .innerJoin("saunas", "saunas.id", "activities.sauna_id")
+      .innerJoin("users", "users.id", "activities.user_id")
+      .select(
+        "activities.id as id",
+        "activities.user_id as user_id",
+        "users.user_name as user_name",
+        "activities.sauna_id as sauna_id",
+        "saunas.sauna_name as sauna_name",
+        "report as report",
+        "relax as relax",
+        "created_at as created_at"
+      )
+      .where({ "activities.id": id });
+
+    if (result.length > 0) {
+      return new Activity(result.pop());
+    }
+  };
+
   const createActivities = (params) => {
     const { user_id, sauna_id, report, relax } = params;
 
@@ -131,7 +155,9 @@ module.exports = function(knex) {
   return {
     // list: getActivities().map((activity) => new Activity(activity)),
     list: getActivities,
+    list_async: getActivities_async,
     selectSingle: getActivity,
+    selectSingle_async: getActivity_async,
     create: createActivities,
     update: updateActivities,
     delete: deleteActivities,

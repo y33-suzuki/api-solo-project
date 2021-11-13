@@ -21,10 +21,10 @@ module.exports = {
       ssl: { rejectUnauthorized: false },
     },
     migrations: {
-      directory: __dirname + "/migrations",
+      directory: `${__dirname}/migrations`,
     },
     seeds: {
-      directory: __dirname + "/seeds",
+      directory: `${__dirname}/seeds`,
     },
   },
 };
