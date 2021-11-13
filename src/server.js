@@ -24,6 +24,7 @@ const config = require("../config");
 const knex = require("knex")(config.db);
 const models = require("../models")(knex);
 
+// swaggerの設定
 const options = {
   swaggerDefinition: {
     info: {
@@ -33,7 +34,6 @@ const options = {
   },
   apis: ["./src/server.js"],
 };
-
 app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerJSDoc(options)));
 
 const setupServer = () => {
